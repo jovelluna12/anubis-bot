@@ -81,18 +81,32 @@ async def bonk(ctx, arg):
 async def beat(ctx,arg):
     name = await commands.MemberConverter().convert(ctx, arg)
     if name is not None:
-        await ctx.send(f"{name.mention} got beaten up by {ctx.author.mention}")
-        numbers = [1, 2, 3, 4]
-        choice = random.choice(numbers)
-        if choice == 1:
-            f = discord.File('photos/beat1.gif')
-        if choice == 2:
-            f = discord.File('photos/beat2.gif')
-        if choice == 3:
-            f = discord.File('photos/beat3.gif')
-        if choice == 4:
-            f = discord.File('photos/beat4.gif')
-        await ctx.send(file=f)
+        if name==ctx.author:
+            await ctx.send(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
+            numbers = [1, 2, 3, 4]
+            choice = random.choice(numbers)
+            if choice == 1:
+                f = discord.File('photos/selfbeat1.gif')
+            if choice == 2:
+                f = discord.File('photos/selfbeat2.gif')
+            if choice == 3:
+                f = discord.File('photos/selfbeat3.gif')
+            if choice == 4:
+                f = discord.File('photos/selfbeat4.gif')
+            await ctx.send(file=f)
+        else:
+            await ctx.send(f"{name.mention} got beaten up by {ctx.author.mention}")
+            numbers = [1, 2, 3, 4]
+            choice = random.choice(numbers)
+            if choice == 1:
+                f = discord.File('photos/beat1.gif')
+            if choice == 2:
+                f = discord.File('photos/beat2.gif')
+            if choice == 3:
+                f = discord.File('photos/beat3.gif')
+            if choice == 4:
+                f = discord.File('photos/beat4.gif')
+            await ctx.send(file=f)
 
     else:
         await ctx.send("Could not Find that User")

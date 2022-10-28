@@ -60,26 +60,28 @@ async def on_member_join(member):
 
 @client.command()
 async def bonk(ctx, arg):
-    name=await commands.MemberConverter().convert(ctx,arg)
-    if name is not None:
-        if name is ctx.author:
-            await ctx.send(f"{ctx.author.mention} realized he was getting sus and bonked himself!")
-            await ctx.send(file=discord.File('photos/selfbonk.gif'))
+    try:
+        name=await commands.MemberConverter().convert(ctx,arg)
+        if name is not None:
+            if name is ctx.author:
+                await ctx.send(f"{ctx.author.mention} realized he was getting sus and bonked himself!")
+                await ctx.send(file=discord.File('photos/selfbonk.gif'))
+            else:
+                await ctx.send(f"{name.mention} was bonked by {ctx.author.mention}")
+                numbers = [1, 2, 3, 4]
+                choice=random.choice(numbers)
+                if choice == 1:
+                    f=discord.File('photos/bonk1.gif')
+                if choice == 2:
+                    f=discord.File('photos/bonk2.gif')
+                if choice == 3:
+                    f = discord.File('photos/bonk3.gif')
+                if choice == 4:
+                    f = discord.File('photos/bonk4.gif')
+                await ctx.send(file=f)
         else:
-            await ctx.send(f"{name.mention} was bonked by {ctx.author.mention}")
-            numbers = [1, 2, 3, 4]
-            choice=random.choice(numbers)
-            if choice == 1:
-                f=discord.File('photos/bonk1.gif')
-            if choice == 2:
-                f=discord.File('photos/bonk2.gif')
-            if choice == 3:
-                f = discord.File('photos/bonk3.gif')
-            if choice == 4:
-                f = discord.File('photos/bonk4.gif')
-            await ctx.send(file=f)
-
-    else:
+            await ctx.send("Could not Find that User")
+    except discord.ext.commands.errors.MemberNotFound:
         await ctx.send("Could not Find that User")
 
 @client.command()

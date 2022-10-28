@@ -63,7 +63,7 @@ async def bonk(ctx, arg):
     name=await commands.MemberConverter().convert(ctx,arg)
     if name is not None:
         if name is ctx.author:
-            await ctx.send(f"{ctx.author} realized he was getting sus and bonked himself!")
+            await ctx.send(f"{ctx.author.mention} realized he was getting sus and bonked himself!")
             await ctx.send(file=discord.File('photos/selfbonk.gif'))
         else:
             await ctx.send(f"{name.mention} was bonked by {ctx.author.mention}")

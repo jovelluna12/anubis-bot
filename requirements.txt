@@ -1,2 +1,2 @@
-pip install -U discord.py
-pip install -U pillow
+pip install -r discord.py
+pip install -r pillow

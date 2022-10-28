@@ -1,6 +1,6 @@
 # This example requires the 'message_content' intent.
 import discord
-
+from keep_alive import keep_alive
 import random
 from discord.ext import commands
 import os
@@ -118,4 +118,8 @@ async def beat(ctx,arg):
     else:
         await ctx.send("Could not Find that User")
 
-client.run(token)
+keep_alive()
+try:
+  client.run(token)
+except:
+  os.system("kill 1")

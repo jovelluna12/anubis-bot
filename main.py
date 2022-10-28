@@ -81,7 +81,7 @@ async def bonk(ctx, arg):
 async def beat(ctx,arg):
     name = await commands.MemberConverter().convert(ctx, arg)
     if name is not None:
-        if name==ctx.author:
+        if name is ctx.author:
             await ctx.send(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
             numbers = [1, 2, 3, 4]
             choice = random.choice(numbers)

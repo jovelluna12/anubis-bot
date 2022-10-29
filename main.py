@@ -1,6 +1,9 @@
+import asyncio
+
 import discord
 from keep_alive import keep_alive
 import random
+import discord.interactions
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
@@ -16,11 +19,12 @@ intents.message_content = True
 intents.members=True
 intents.presences=True
 
-client=commands.Bot(command_prefix="anubis-",intents=intents)
+help_command=commands.DefaultHelpCommand(
+    no_category='Fun Commands'
+)
+description="A Basic BOT with Limited Functionalities"
 
-@client.event
-async def on_ready():
-    pass
+client=commands.Bot(command_prefix="anubis-",description=description,help_command=help_command,intents=intents)
 
 @client.event
 async def on_member_join(member):
@@ -55,40 +59,60 @@ async def on_member_join(member):
     except discord.Forbidden:
         pass
 
-@client.command()
+@client.command(description="Bonks a User")
 async def bonk(ctx, arg):
+    async with ctx.channel.typing():
+        await asyncio.sleep(1)
     try:
         name=await commands.MemberConverter().convert(ctx,arg)
         if name is not None:
             if name is ctx.author:
-                await ctx.send(f"{ctx.author.mention} realized he was getting sus and bonked himself!")
+                await ctx.reply(f"{ctx.author.mention} realized he was getting sus and bonked himself!")
                 await ctx.send(file=discord.File('photos/selfbonk.gif'))
             else:
-                await ctx.send(f"{name.mention} was bonked by {ctx.author.mention}")
+                await ctx.reply(f"{name.mention} was bonked by {ctx.author.mention}")
 
-                choice=[discord.File('photos/bonk1.gif'),discord.File('photos/bonk2.gif'),discord.File('photos/bonk3.gif'),discord.File('photos/bonk4.gif')]
+                choice=[
+                    discord.File('photos/bonk1.gif'),
+                    discord.File('photos/bonk2.gif'),
+                    discord.File('photos/bonk3.gif'),
+                    discord.File('photos/bonk4.gif')
+                        ]
                 f=random.choice(choice)
                 await ctx.send(file=f)
     except discord.ext.commands.errors.MemberNotFound:
-        await ctx.send("Could not Find that User")
+        await ctx.reply("Could not Find that User")
 
-@client.command()
+@client.command(description="Beats up a User")
 async def beat(ctx,arg):
+    async with ctx.channel.typing():
+        await asyncio.sleep(1)
     try:
         name = await commands.MemberConverter().convert(ctx, arg)
         if name is not None:
             if name is ctx.author:
-                await ctx.send(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
-                selfbeat=[discord.File('photos/selfbeat1.gif'),discord.File('photos/selfbeat2.gif'),discord.File('photos/selfbeat3.gif'),discord.File('photos/selfbeat4.gif')]
+                await ctx.reply(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
+                selfbeat=[
+                    discord.File('photos/selfbeat1.gif'),
+                    discord.File('photos/selfbeat2.gif'),
+                    discord.File('photos/selfbeat3.gif'),
+                    discord.File('photos/selfbeat4.gif')
+                        ]
                 f = random.choice(selfbeat)
                 await ctx.send(file=f)
             else:
-                await ctx.send(f"{name.mention} got beaten up by {ctx.author.mention}")
-                beat=[discord.File('photos/beat1.gif'),discord.File('photos/beat2.gif'),discord.File('photos/beat3.gif'),discord.File('photos/beat4.gif')]
+                await ctx.reply(f"{name.mention} got beaten up by {ctx.author.mention}")
+                beat=[
+                    discord.File('photos/beat1.gif'),
+                    discord.File('photos/beat2.gif'),
+                    discord.File('photos/beat3.gif'),
+                    discord.File('photos/beat4.gif')
+                    ]
                 f = random.choice(beat)
                 await ctx.send(file=f)
     except discord.ext.commands.errors.MemberNotFound:
-        await ctx.send("Could not Find that User")
+        await ctx.reply("Could not Find that User")
+
 keep_alive()
 try:
   client.run(token)

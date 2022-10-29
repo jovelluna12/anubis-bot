@@ -1,9 +1,9 @@
 import asyncio
-
 import discord
 from keep_alive import keep_alive
 import random
 from discord.ext import commands
+from discord import app_commands
 import os
 from dotenv import load_dotenv
 from PIL import Image,ImageFont,ImageDraw
@@ -18,13 +18,17 @@ intents.message_content = True
 intents.members=True
 intents.presences=True
 
-help_command=commands.DefaultHelpCommand(
-    no_category='Fun Commands'
-)
 description="A Basic BOT with Limited Functionalities"
 
-client=commands.Bot(command_prefix="anubis-",description=description,help_command=help_command,intents=intents)
+client=commands.Bot(command_prefix="anubis-",description=description,help_command=None,intents=intents)
 
+@client.event
+async def on_ready():
+    try:
+        await client.tree.sync()
+        print("Ready")
+    except Exception as e:
+        print(e)
 @client.event
 async def on_member_join(member):
 
@@ -82,7 +86,7 @@ async def bonk(ctx, arg):
     except discord.ext.commands.errors.MemberNotFound:
         await ctx.reply("Could not Find that User")
 
-@client.command(description="Beats up a User")
+@client.command()
 async def beat(ctx,arg):
     async with ctx.channel.typing():
         await asyncio.sleep(1)
@@ -112,18 +116,38 @@ async def beat(ctx,arg):
     except discord.ext.commands.errors.MemberNotFound:
         await ctx.reply("Could not Find that User")
 
-@client.command(description="Sends a Message without Revealing the Sender.\nMessage will get deleted if there's no Message.")
-async def confess(ctx,user):
+@client.tree.command(name="confess")
+@app_commands.describe(receiver="Message Receiver",message="The Message")
+async def confess(interaction: discord.Interaction, receiver: discord.Member,message: str):
+    await interaction.response.send_message(f"Message Successfully Sent",ephemeral=True)
+    channel=interaction.channel
+    created_at=interaction.created_at
+    await channel.send(f"```Anonymous Messaging\nTo: {receiver.name}\n{message}\nMessage Created at: {created_at}```")
 
-    to=await commands.MemberConverter().convert(ctx, user)
-    message=' '.join(ctx.message.content.split()[2:])
-    if len(message)==0:
-        await ctx.message.delete()
-        pass
+@client.command()
+async def help (ctx):
+    if ctx.message.content=="anubis-help":
+        await ctx.reply("```Commands List\n\nNon-Slash Commands\nCommand Prefix: anubis-\nhelp: Views this Help Message\nbonk: Bonks a User\nbeat: Beats a User\n\nSlash Commands\nconfess: Sends Anonymous Message\n\nSend anubis-help_{name-of-command} for more Details about that Command```")
     else:
-        await ctx.message.delete()
-        await ctx.send(f"A message to {to.mention}\n{message}")
-
+        await ctx.reply("Invalid Command. Make sure that you Invoked the Right Command with no Spelling Mistakes")
+@client.command()
+async def help_bonk(ctx):
+    if ctx.message.content=="anubis-help_bonk":
+        await ctx.reply('```Bonk\nBonks a User\n\nArguments: Name of User to Bonk: This can be a User name in Plain Text, a User Name with Tag, or the User Mentioned ```')
+    else:
+        await ctx.reply("Invalid Command. Make sure that you Invoked the Right Command with no Spelling Mistakes")
+@client.command()
+async def help_beat(ctx):
+    if ctx.message.content=="anubis-help beat":
+        await ctx.reply('```Beat\nBeat a User\n\nArguments: Name of User to Beat: This can be a User name in Plain Text, a User Name with Tag, or the User Mentioned ```')
+    else:
+        await ctx.reply("Invalid Command. Make sure that you Invoked the Right Command with no Spelling Mistakes")
+@client.command()
+async def help_confess(ctx):
+    if ctx.message.content=="anubis-help_confess":
+        await ctx.reply('```Confess\nSend Anonymous Message to a User\n\nArguments: Name of Receiver```')
+    else:
+        await ctx.reply("Invalid Command. Make sure that you Invoked the Right Command with no Spelling Mistakes")
 @client.event
 async def on_command_error(ctx,error):
     await ctx.reply(f"Invalid Command\n{error}")
@@ -131,5 +155,6 @@ async def on_command_error(ctx,error):
 keep_alive()
 try:
   client.run(token)
+
 except:
   os.system("kill 1")

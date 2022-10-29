@@ -1,4 +1,3 @@
-# This example requires the 'message_content' intent.
 import discord
 from keep_alive import keep_alive
 import random
@@ -17,9 +16,7 @@ intents.message_content = True
 intents.members=True
 intents.presences=True
 
-
 client=commands.Bot(command_prefix="anubis-",intents=intents)
-
 
 @client.event
 async def on_ready():
@@ -68,56 +65,30 @@ async def bonk(ctx, arg):
                 await ctx.send(file=discord.File('photos/selfbonk.gif'))
             else:
                 await ctx.send(f"{name.mention} was bonked by {ctx.author.mention}")
-                numbers = [1, 2, 3, 4]
-                choice=random.choice(numbers)
-                if choice == 1:
-                    f=discord.File('photos/bonk1.gif')
-                if choice == 2:
-                    f=discord.File('photos/bonk2.gif')
-                if choice == 3:
-                    f = discord.File('photos/bonk3.gif')
-                if choice == 4:
-                    f = discord.File('photos/bonk4.gif')
+
+                choice=[discord.File('photos/bonk1.gif'),discord.File('photos/bonk2.gif'),discord.File('photos/bonk3.gif'),discord.File('photos/bonk4.gif')]
+                f=random.choice(choice)
                 await ctx.send(file=f)
-        else:
-            await ctx.send("Could not Find that User")
     except discord.ext.commands.errors.MemberNotFound:
         await ctx.send("Could not Find that User")
 
 @client.command()
 async def beat(ctx,arg):
-    name = await commands.MemberConverter().convert(ctx, arg)
-    if name is not None:
-        if name is ctx.author:
-            await ctx.send(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
-            numbers = [1, 2, 3, 4]
-            choice = random.choice(numbers)
-            if choice == 1:
-                f = discord.File('photos/selfbeat1.gif')
-            if choice == 2:
-                f = discord.File('photos/selfbeat2.gif')
-            if choice == 3:
-                f = discord.File('photos/selfbeat3.gif')
-            if choice == 4:
-                f = discord.File('photos/selfbeat4.gif')
-            await ctx.send(file=f)
-        else:
-            await ctx.send(f"{name.mention} got beaten up by {ctx.author.mention}")
-            numbers = [1, 2, 3, 4]
-            choice = random.choice(numbers)
-            if choice == 1:
-                f = discord.File('photos/beat1.gif')
-            if choice == 2:
-                f = discord.File('photos/beat2.gif')
-            if choice == 3:
-                f = discord.File('photos/beat3.gif')
-            if choice == 4:
-                f = discord.File('photos/beat4.gif')
-            await ctx.send(file=f)
-
-    else:
+    try:
+        name = await commands.MemberConverter().convert(ctx, arg)
+        if name is not None:
+            if name is ctx.author:
+                await ctx.send(f"{name.mention} couldn't take it anymore and wanted to beat himself up")
+                selfbeat=[discord.File('photos/selfbeat1.gif'),discord.File('photos/selfbeat2.gif'),discord.File('photos/selfbeat3.gif'),discord.File('photos/selfbeat4.gif')]
+                f = random.choice(selfbeat)
+                await ctx.send(file=f)
+            else:
+                await ctx.send(f"{name.mention} got beaten up by {ctx.author.mention}")
+                beat=[discord.File('photos/beat1.gif'),discord.File('photos/beat2.gif'),discord.File('photos/beat3.gif'),discord.File('photos/beat4.gif')]
+                f = random.choice(beat)
+                await ctx.send(file=f)
+    except discord.ext.commands.errors.MemberNotFound:
         await ctx.send("Could not Find that User")
-
 keep_alive()
 try:
   client.run(token)

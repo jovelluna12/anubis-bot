@@ -3,7 +3,6 @@ import asyncio
 import discord
 from keep_alive import keep_alive
 import random
-import discord.interactions
 from discord.ext import commands
 import os
 from dotenv import load_dotenv

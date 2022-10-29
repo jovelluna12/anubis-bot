@@ -112,6 +112,22 @@ async def beat(ctx,arg):
     except discord.ext.commands.errors.MemberNotFound:
         await ctx.reply("Could not Find that User")
 
+@client.command(description="Sends a Message without Revealing the Sender.\nMessage will get deleted if there's no Message.")
+async def confess(ctx,user):
+
+    to=await commands.MemberConverter().convert(ctx, user)
+    message=' '.join(ctx.message.content.split()[2:])
+    if len(message)==0:
+        await ctx.message.delete()
+        pass
+    else:
+        await ctx.message.delete()
+        await ctx.send(f"A message to {to.mention}\n{message}")
+
+@client.event
+async def on_command_error(ctx,error):
+    await ctx.reply(f"Invalid Command\n{error}")
+
 keep_alive()
 try:
   client.run(token)

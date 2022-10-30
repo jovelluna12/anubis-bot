@@ -1,4 +1,4 @@
-# anubisBOT
+# Discord Bot: Anubis
 Basic Discord Bot with Limited Functionalities
 
 # To Get Started

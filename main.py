@@ -195,9 +195,9 @@ async def help_confess(ctx):
         await ctx.reply('```Confess\nSlash Command\nSend Anonymous Message to a User\n\nArguments: Name of Receiver```')
     else:
         await ctx.reply("Invalid Command. Make sure that you Invoked the Right Command with no Spelling Mistakes")
-# @client.event
-# async def on_command_error(ctx,error):
-#     await ctx.reply(f"Invalid Command\n{error}")
+@client.event
+async def on_command_error(ctx,error):
+    await ctx.reply(f"Invalid Command\n{error}")
 
 keep_alive()
 try:
